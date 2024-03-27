@@ -11,7 +11,7 @@ import 'package:flutter_store/routes/routes_config.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/img_upload/img.cubit.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/img_upload/img_upload_cubit.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/product_cubit/product_cubit.dart';
-name
+
 Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

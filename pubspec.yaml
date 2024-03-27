@@ -43,6 +43,8 @@ dependencies:
   cached_network_image:
   hive:
   another_carousel_pro: ^1.0.2
+  go_router:
+  animated_text_kit:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
