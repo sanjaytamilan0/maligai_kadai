@@ -14,6 +14,7 @@ import 'package:flutter_store/ui/userscreen/product_adding.dart';
 import 'package:flutter_store/ui/userscreen/setting.dart';
 import 'package:flutter_store/ui/userscreen/viewProduct.dart';
 import 'package:go_router/go_router.dart';
+import 'package:liquid_swipe/liquid_swipe.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final width = MediaQuery.of(context).size.width;
     List screens = [
       const Home(),
-     Cart(),
+       Cart(),
 
       if (auth  == 'sanjay@gmail.com') ...[
         const AdminCategoryAddScreen(),
@@ -280,10 +281,11 @@ class _HomeScreenState extends State<HomeScreen> {
       // state is ImageUploading? Center(
     //     child: CircularProgressIndicator(),
     // ):
-
       screens[
       selectedScreen
       ],
+
+
     );
   // },
 // );

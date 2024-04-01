@@ -15,7 +15,7 @@ class Setting extends StatelessWidget {
           .get();
       if (cartSnapshot.docs.isNotEmpty) {
         print('Item already exists in the cart.');
-        return ;
+        return;
       }
       await FirebaseFirestore.instance.collection('carts').add({
         'cartId': FirebaseFirestore.instance.collection('carts').doc().id,
@@ -24,12 +24,14 @@ class Setting extends StatelessWidget {
         'price': product['price'],
         'image': product['imageURL'],
         'Qty': 1,
-        'cartPrice': product['price']
+        'cartPrice': product['price'],
       });
     } catch (error) {
       print(error);
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,8 @@ class Setting extends StatelessWidget {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final product = snapshot.data!.docs[index];
+              final productId = product.id; // Get the document ID
+              final isFavorite = product['favorite'] ?? false;
               return ListTile(
                 leading: Container(
                   height: 50,
@@ -63,15 +67,32 @@ class Setting extends StatelessWidget {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    IconButton(
+                      onPressed: () async {
+                        await FirebaseFirestore.instance
+                            .collection('products')
+                            .doc(productId)
+                            .update({'favorite': !isFavorite});
+                      },
+                      icon: isFavorite
+                          ? Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )
+                          : Icon(
+                        Icons.favorite_border,
+                        color: Colors.red,
+                      ),
+                    ),
+
                     Text('₹ ${product['price'] ?? ''}'),
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () async {
-                           addToCart(product);
+                        addToCart(product);
                       },
                       child: const Text('Add to Cart'),
                     ),
-
                   ],
                 ),
               );
@@ -81,5 +102,4 @@ class Setting extends StatelessWidget {
       },
     );
   }
-
 }

@@ -1,129 +1,172 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:typed_data';
-
+import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 
 class Favorite extends StatefulWidget {
-
-  Favorite({Key? key ,}) : super(key: key);
+  Favorite({Key? key}) : super(key: key);
 
   @override
   _FavoriteState createState() => _FavoriteState();
 }
 
 class _FavoriteState extends State<Favorite> {
-  Uint8List? imageFile;
-  String? fileName;
-  String? imageUrl;
-
-  Future<void> _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      allowMultiple: false,
-    );
-
-    if (result != null) {
-      setState(() {
-        imageFile = result.files.first.bytes;
-        fileName = result.files.first.name;
-
-      });
-
-      await _uploadImageToFirestore(result.files.first.bytes!);
-    }
-  }
-
-  Future<void> _uploadImageToFirestore(Uint8List bytes) async {
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference storageRef = storage.ref().child('images/$fileName');
-    UploadTask uploadTask = storageRef.putData(bytes);
-
-    await uploadTask.whenComplete(() async {
-      String downloadUrl = await storageRef.getDownloadURL();
-
-      setState(() {
-        imageUrl = downloadUrl;
-      });
-    });
-  }
-
-  void addProduct() {
-    if (imageUrl != null && fileName != null) {
-      FirebaseFirestore.instance.collection('products').add({
-        'imageURL': imageUrl!,
-        // Add other product details as needed
-      }).then((_) {
-        // Product added successfully
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Product added successfully')),
-        );
-      }).catchError((error) {
-        print('Error adding product: $error');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding product: $error')),
-        );
-      });
-    } else {
-      print('Image URL or file name is null');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final myHeight = MediaQuery.of(context).size.height;
+    final myWidth = MediaQuery.of(context).size.width;
+    print(myHeight);
+    print(myWidth);
 
-
-    return   Center(
-
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          if (imageFile != null)
-            Container(
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: MemoryImage(imageFile!),
-                  fit: BoxFit.cover,
-                ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 25),
+              child: Text(
+                'MY FAVORITE',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
-            )
-          else
-            const Text('No image picked'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _pickFile,
-            child: const Text('Pick an image file'),
+            ),
+            Row(
+              children: [
+                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
+                IconButton(onPressed: () {}, icon: Icon(Icons.access_alarm)),
+                IconButton(onPressed: () {}, icon: Icon(Icons.person_off))
+              ],
+            ),
+          ],
+        ),
+        Center(
+          child: Text(
+            'favorites',
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 23),
           ),
-          const SizedBox(height: 20),
-          if (fileName != null) Text('File Name: $fileName'),
-          if (imageUrl != null) Text('Image URL: $imageUrl'),
-          TextButton(
-            onPressed: addProduct,
-            child: const Text('ADD product'),
-          ),
-          Container(
+        ),
+        SizedBox(
+          height: 23,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 25, right: 25, top: 20),
+            child: Container(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('products')
+                    .where('favorite', isEqualTo: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    final favoriteProducts = snapshot.data!.docs;
 
-            height: 100,
-            width:100,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black,
-                width: 4
+                    return GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 2 / 3,
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 6
+                      ),
+                      itemCount: favoriteProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = favoriteProducts[index];
+                        return
+                          Stack(
+                          children: [
+                            Container(
+                              height: 150,
+
+
+                              decoration: BoxDecoration(
+                                image: DecorationImage(image: NetworkImage(product['imageURL']
+
+                                ),fit: BoxFit.cover)
+                              ),
+                            ),
+                                    Positioned(
+                                      left:0,top: 0,
+                                      child: IconButton(
+                                          onPressed: () {},
+                                          icon: product['favorite']
+                                              ? Icon(
+                                                  Icons.favorite,
+                                                  color: Colors.red,
+                                                )
+                                              : Icon(
+                                                  Icons.favorite_border,
+                                                  color: Colors.red,
+                                                )),
+                                    ),
+                                    // Positioned(
+                                    //   top:50,
+                                    //   left:30,
+                                    //   child: Container(
+                                    //     height: 100,
+                                    //     width: 100,
+                                    //     decoration: BoxDecoration(
+                                    //         image: DecorationImage(
+                                    //             fit: BoxFit.fill,
+                                    //             image: NetworkImage(
+                                    //                 product['imageURL']))),
+                                    //
+                                    // ),
+
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: [
+                                    //     // IconButton(onPressed: () {}, icon: product['favorite'] ?  Icon(Icons.favorite,
+                                    //     //   color: Colors.red,
+                                    //     // ):
+                                    //     //     Icon(Icons.favorite_border,
+                                    //     //       color: Colors.red,
+                                    //     //     )
+                                    //     // ),
+                                    //     // IconButton(
+                                    //     //     onPressed: () {},
+                                    //     //     icon: Icon(Icons.close)),
+                                    //   ],
+                                    // ),
+                                    // Center(
+                                    //   // child: Container(
+                                    //   //   height: 100,
+                                    //   //   width: 100,
+                                    //   //   decoration: BoxDecoration(
+                                    //   //       image: DecorationImage(
+                                    //   //           fit: BoxFit.fill,
+                                    //   //           image: NetworkImage(
+                                    //   //               product['imageURL']))),
+                                    //   // ),
+                                    // ),
+
+                            // ),
+                            Positioned(
+                              right:0,
+                              child: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.close)),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
               ),
-              image:  DecorationImage(
-
-                image: NetworkImage(
-                    imageUrl.toString()
-                )
-              )
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

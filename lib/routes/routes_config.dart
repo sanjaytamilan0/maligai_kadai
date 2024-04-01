@@ -11,7 +11,9 @@ import 'package:go_router/go_router.dart';
 class RouteConfig {
   static GoRouter returnRouterName() {
     final auth = FirebaseAuth.instance;
-    return GoRouter(initialLocation: '/', routes: [
+    return GoRouter(
+        initialLocation: '/',
+        routes: [
       GoRoute(
           path: '/',
           name  :  RoutesName.initial,
