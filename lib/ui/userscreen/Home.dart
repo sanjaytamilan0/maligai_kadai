@@ -1,7 +1,9 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_store/colors/colors.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/img_upload/img.cubit.dart';
@@ -43,8 +45,7 @@ class _HomeState extends State<Home> {
                         size: 50,
                       ),
 
-
-                        // child: const CircularProgressIndicator()
+                      // child: const CircularProgressIndicator()
                     );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
@@ -69,7 +70,7 @@ class _HomeState extends State<Home> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child:LoadingAnimationWidget.fourRotatingDots(
+                      child: LoadingAnimationWidget.fourRotatingDots(
                         color: Color.fromARGB(255, 12, 110, 42),
                         size: 50,
                       ),
@@ -275,25 +276,62 @@ class _HomeState extends State<Home> {
                         itemCount: snapshots.data?.docs.length,
                         itemBuilder: (BuildContext context, int index) {
                           final myHotProduct = snapshots.data?.docs[index];
+                          final productId = myHotProduct?.id; // Get the document ID
+                          final isFavorite = myHotProduct?['favorite'] ?? false;
 
                           return Card(
                             child: Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 300,
-                                    height:
-                                        witdh > 540 ? (witdh / 2) - 10 : 228,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                          myHotProduct?['imageURL'],
+                                  child: Stack(children: [
+                                    Container(
+                                      width: 300,
+                                      height:
+                                          witdh > 540 ? (witdh / 2) - 10 : 228,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(
+                                            myHotProduct?['imageURL'],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                 context.read<ImageCubit>().addToCart(myHotProduct!);
+                                              },
+                                              icon: Icon(Icons.shopping_cart_outlined)),
+                                          IconButton(
+                                            onPressed: () async {
+                                              await FirebaseFirestore.instance
+                                                  .collection('products')
+                                                  .doc(productId)
+                                                  .update({'favorite': !isFavorite});
+                                            },
+                                            icon: isFavorite
+                                                ? Icon(
+                                              Icons.favorite,
+                                              color: Colors.red,
+                                            )
+                                                : Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
                                 ),
                                 const SizedBox(
                                   height: 20,

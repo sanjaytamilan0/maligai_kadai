@@ -3,10 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_store/User/login_cubit.dart';
 import 'package:flutter_store/User/login_state.dart';
-import 'package:flutter_store/Widgets/Register.dart';
-import 'package:flutter_store/Widgets/forget_password.dart';
 import 'package:flutter_store/routes/routes_name.dart';
-import 'package:flutter_store/ui/HomeScreen.dart';
 import 'package:go_router/go_router.dart';
 
 class Login extends StatefulWidget {
@@ -20,12 +17,15 @@ class _LoginState extends State<Login> {
   GlobalKey<FormState> loginForm = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController phoneNo = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+   final width = MediaQuery.of(context).size.width;
+   print(width);
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100.0), // Set your preferred height here
+        preferredSize: const Size.fromHeight(100.0),
         child: AppBar(
           title: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,6 +38,7 @@ class _LoginState extends State<Login> {
       ),
       body: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
+          final loginAccess =  context.read<LoginCubit>();
           if (state is LoginLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is LoginSuccess) {
@@ -57,7 +58,7 @@ class _LoginState extends State<Login> {
                 behavior: SnackBarBehavior.floating,
               ),
             );
-            context.goNamed(RoutesName.homeScreen);
+            context.goNamed(loginAccess.auth.currentUser!.email  == 'sanjay@gmail.com'? RoutesName.adminDashBoard:RoutesName.homeScreen);
             // Navigator.pushReplacement(
             //   context,
             //   MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -88,7 +89,7 @@ class _LoginState extends State<Login> {
               child: Center(
                 child: Container(
                   width: 500,
-                  height: 500,
+                  height: 570,
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -104,7 +105,7 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       const SizedBox(
-                        height: 100,
+                        height: 60,
                         child: Center(
                           child: Text(
                             'Maligai kadai',
@@ -118,7 +119,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Container(
-                        height: 250,
+                        height: 360,
                         child: Padding(
                           padding: const EdgeInsets.only(
                             right: 40,
@@ -138,6 +139,7 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ),
+
                               SizedBox(height: 5),
                               TextFormField(
                                 inputFormatters: [
@@ -154,7 +156,41 @@ class _LoginState extends State<Login> {
                                 ),
                                 validator: (email) {
                                   if (email!.isEmpty) {
-                                    return 'enter valid email';
+                                    return 'enter valid phoneNo';
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 20),
+                                child: Text(
+                                  'phone NO',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 5),
+
+
+                              SizedBox(height: 5),
+                              TextFormField(
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10),
+                                ],
+                                controller: phoneNo,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your phoneNo',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                                validator: (phone) {
+                                  if (phone!.isEmpty) {
+                                    return 'enter valid phone';
                                   }
                                 },
                               ),
@@ -192,8 +228,10 @@ class _LoginState extends State<Login> {
                                 },
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  left:250
+                                padding: width >450?  EdgeInsets.only(
+                                    left:250
+                                ) :EdgeInsets.only(
+                                  left:125
                                 ),
                                 child: GestureDetector(
                                   onTap: (){
@@ -229,7 +267,9 @@ class _LoginState extends State<Login> {
                                     if (loginForm.currentState!.validate()) {
                                       context
                                           .read<LoginCubit>()
-                                          .oldLogIn(email.text, password.text);
+                                          .oldLogIn(email.text, password.text,
+                                        // phoneNumber: '+91${phoneNo.text}'
+                                      );
                                     }
                                   },
                                   child: const Center(

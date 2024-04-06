@@ -1,8 +1,6 @@
-import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_store/ui/userscreen/cart.dart';
 
 class Setting extends StatelessWidget {
   Setting({Key? key});
@@ -25,6 +23,7 @@ class Setting extends StatelessWidget {
         'image': product['imageURL'],
         'Qty': 1,
         'cartPrice': product['price'],
+        'favorite': product['favorite']
       });
     } catch (error) {
       print(error);
@@ -52,6 +51,7 @@ class Setting extends StatelessWidget {
               final productId = product.id; // Get the document ID
               final isFavorite = product['favorite'] ?? false;
               return ListTile(
+                key: ValueKey(index),
                 leading: Container(
                   height: 50,
                   width: 50,

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,8 @@ import 'package:flutter_store/routes/routes_config.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/img_upload/img.cubit.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/img_upload/img_upload_cubit.dart';
 import 'package:flutter_store/ui/userscreen/firestore/user_firestore/product_cubit/product_cubit.dart';
+
+import 'admin/admin_dashboard/admin_dashboard_ui/admin_dashboard.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(
@@ -52,19 +55,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    // final auth = FirebaseAuth.instance;
+
+    // return MaterialApp(
+    //   home: AdminDashBoard(),
+    //   debugShowCheckedModeBanner: false,
+    //   // scrollBehavior: WebCustomScrollView(),
+    // );
+
+    // // final auth = FirebaseAuth.instance;
     return  MaterialApp.router(
-
       routerConfig: RouteConfig.returnRouterName(),
-        // routerDelegate:RouteConfig.returnRouterName().routerDelegate,
       scrollBehavior: WebCustomScrollView(),
-
-
       // home:auth.currentUser!= null? HomeScreen():  Login(),
       debugShowCheckedModeBanner: false,
-      // home: UserScreen(),
-
     );
+
   }
 }
 

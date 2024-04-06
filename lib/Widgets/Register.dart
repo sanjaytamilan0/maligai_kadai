@@ -81,7 +81,7 @@ class _RegisterState extends State<Register> {
                   child: Center(
                     child: Container(
                       width: 500,
-                      height: 500,
+                      height: 512,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           SizedBox(
-                            height: 300,
+                            height: 312,
                             child: Padding(
                               padding: const EdgeInsets.only(
                                 right: 40,
@@ -263,7 +263,9 @@ class _RegisterState extends State<Register> {
                                           context.read<RegistrationCubit>()
                                               .registerNew(
                                               email.text,
-                                              password.text);
+                                              password.text,
+
+                                          );
                                           FirebaseFirestore.instance.collection('users').add(
                                               {
                                                 'email' : email.text,

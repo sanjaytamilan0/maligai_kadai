@@ -19,11 +19,14 @@ class ImageCubit extends Cubit<ImageUploadState>{
   final TextEditingController quantity = TextEditingController();
   final TextEditingController categoryName = TextEditingController();
   final CollectionReference categoryDb = FirebaseFirestore.instance.collection('categories');
+  final cartDb = FirebaseFirestore.instance.collection('carts');
+  final productsDb = FirebaseFirestore.instance.collection('Products');
   List<Category> categoriesList = [];
  dynamic imageFile;
   String? fileName;
   String? imgDownUrl;
   bool next = false;
+   bool searchbar = false;
 
   void emitLoading(){
     emit(ImageUploading());
@@ -62,9 +65,8 @@ class ImageCubit extends Cubit<ImageUploadState>{
   }
 
   void addProduct() {
-    final adding = FirebaseFirestore.instance.collection('products');
-    adding.add({
-      'id': adding.doc().id,
+    productsDb.add({
+      'id': productsDb.doc().id,
       'name':  productName.text,
       'description': productDescription.text,
       'price': productPrice.text,
@@ -108,5 +110,30 @@ Future getDataFromFireStoreCategory() async{
       },
     );
   }
+
+  Future<void> addToCart(DocumentSnapshot product) async {
+    try {
+      final QuerySnapshot cartSnapshot = await cartDb
+          .where('name', isEqualTo: product['name'])
+          .get();
+      if (cartSnapshot.docs.isNotEmpty) {
+        print('Item already exists in the cart.');
+        return;
+      }
+      await cartDb.add({
+        'cartId': cartDb.doc().id,
+        'name': product['name'],
+        'description': product['description'],
+        'price': product['price'],
+        'image': product['imageURL'],
+        'Qty': 1,
+        'cartPrice': product['price'],
+        'favorite': product['favorite']
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
+
 
 }

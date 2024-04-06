@@ -1,9 +1,15 @@
 
 class RoutesName{
   static const String initial = 'initial';
+  static const String otpScreen = '/otpScreen';
   static const String login = '/login';
   static const String forget = '/forget';
   static const String homeScreen = '/homeScreen';
+
+
+  static const String adminDashBoard = '/adminDashBoard';
+  static const String addProduct = '/addProduct';
+
 
   static const String home = '/home';
   static const String cart = '/cart';

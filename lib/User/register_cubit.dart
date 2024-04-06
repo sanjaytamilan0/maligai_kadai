@@ -7,11 +7,14 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   FirebaseAuth auth =FirebaseAuth.instance;
   bool isObscure = true;
 
+
+
+
+
   Future<void> registerNew(String email, String password) async {
     print('_______________________________');
     try {
       emit(RegistrationLoading());
-
       UserCredential? credential =
       await auth.createUserWithEmailAndPassword(email: email, password: password);
       print(credential);
