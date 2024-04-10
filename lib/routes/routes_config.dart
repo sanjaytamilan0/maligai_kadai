@@ -1,4 +1,3 @@
-import 'dart:js';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +5,13 @@ import 'package:flutter_store/Widgets/Login.dart';
 import 'package:flutter_store/Widgets/Register.dart';
 import 'package:flutter_store/Widgets/forget_password.dart';
 import 'package:flutter_store/Widgets/otp_screen.dart';
+import 'package:flutter_store/admin/Setting/setting_ui/profile.dart';
 import 'package:flutter_store/admin/add_product/add_product_ui/add_product.dart';
 import 'package:flutter_store/admin/admin_dashboard/admin_dashboard_ui/admin_dashboard.dart';
 import 'package:flutter_store/routes/routes_name.dart';
 import 'package:flutter_store/ui/HomeScreen.dart';
 import 'package:flutter_store/ui/userscreen/cart.dart';
+import 'package:flutter_store/ui/userscreen/setting.dart';
 import 'package:go_router/go_router.dart';
 
 class RouteConfig {
@@ -22,7 +23,13 @@ class RouteConfig {
         name: RoutesName.initial,
         pageBuilder: (context, state) {
           return MaterialPage(
-              child: auth.currentUser != null ? HomeScreen() : Register());
+              child:
+                auth.currentUser != null
+                      ?
+                    auth.currentUser?.email == 'sanjay@gmail.com'?AdminDashBoard():
+
+                HomeScreen()
+                      : Register());
         },
       ),
       GoRoute(
@@ -44,8 +51,15 @@ class RouteConfig {
                       name: RoutesName.addProduct,
                       pageBuilder: (context, state) {
                         return MaterialPage(child: AddProduct());
-                      })
+                      }),
+                  GoRoute(
+                      path: 'profile',
+                      name: RoutesName.profile,
+                      pageBuilder: (context, state) {
+                        return MaterialPage(child: Profile());
+                      }),
                 ]),
+
             GoRoute(
                 path: 'otpScreen',
                 name: RoutesName.otpScreen,
@@ -94,8 +108,9 @@ class RouteConfig {
                       path: 'setting',
                       name: RoutesName.setting,
                       pageBuilder: (context, state) {
-                        return MaterialPage(child: Cart());
-                      })
+                        return MaterialPage(child: Setting());
+                      }),
+
                 ])
           ]),
     ]);

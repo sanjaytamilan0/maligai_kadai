@@ -9,6 +9,8 @@ class RoutesName{
 
   static const String adminDashBoard = '/adminDashBoard';
   static const String addProduct = '/addProduct';
+  static const String profile = '/profile';
+
 
 
   static const String home = '/home';
@@ -16,6 +18,4 @@ class RoutesName{
   static const String favorite = '/favorite';
   static const String user = '/user';
   static const String setting = '/setting';
-
-
 }

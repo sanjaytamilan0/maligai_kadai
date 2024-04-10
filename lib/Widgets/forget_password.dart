@@ -114,7 +114,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         child: Container(
                           width: 80,
                           height: 30,
-                          color: Colors.red,
+                          color: Colors.green,
                           child: GestureDetector(
                             onTap: () async {
                               if (forgetForm.currentState!.validate()) {
@@ -126,7 +126,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 'Reset',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  backgroundColor: Colors.red,
                                   fontSize: 16,
                                 ),
                               ),
@@ -139,26 +138,21 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text('Try Another Way?'),
-                          Container(
-                            height: 30,
-                            width: 45,
-                            color: Colors.red,
-                            child: GestureDetector(
-                              onTap: () {
-                                context.pop(context);
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => Login(),
-                                //   ),
-                                // );
-                              },
-                              child: const Center(
-                                child: Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                          GestureDetector(
+                            onTap: () {
+                              context.pop(context);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => Login(),
+                              //   ),
+                              // );
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Login',
+                                style: TextStyle(
+                                  color: Colors.blue,
                                 ),
                               ),
                             ),

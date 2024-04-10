@@ -253,7 +253,7 @@ class _RegisterState extends State<Register> {
                                   child: Container(
                                     width: 80,
                                     height: 30,
-                                    color: Colors.red,
+                                    color: Colors.green,
                                     child: GestureDetector(
                                       onTap: () {
                                         print('click');
@@ -279,7 +279,7 @@ class _RegisterState extends State<Register> {
                                           'REGISTER',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            backgroundColor: Colors.red,
+
                                             fontSize: 16,
                                           ),
                                         ),
@@ -292,26 +292,21 @@ class _RegisterState extends State<Register> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text('Already have an account?'),
-                                    Container(
-                                      height: 30,
-                                      width: 40,
-                                      color: Colors.red,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          context.go(RoutesName.login);
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: (context) => Login(),
-                                          //   ),
-                                          // );
-                                        },
-                                        child: const Center(
-                                          child: Text(
-                                            'Login',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.go(RoutesName.login);
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => Login(),
+                                        //   ),
+                                        // );
+                                      },
+                                      child: const Center(
+                                        child: Text(
+                                          'Login',
+                                          style: TextStyle(
+                                            color: Colors.blue,
                                           ),
                                         ),
                                       ),

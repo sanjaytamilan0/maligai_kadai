@@ -7,7 +7,6 @@ import '../../../ui/userscreen/firestore/user_firestore/img_upload/img_upload_st
 
 class AddProduct extends StatelessWidget {
   AddProduct({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> addProductForm = GlobalKey<FormState>();
@@ -92,6 +91,7 @@ class AddProduct extends StatelessWidget {
                             if (productName!.isEmpty) {
                               return 'Enter Product name';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height: 8.0),
@@ -109,6 +109,7 @@ class AddProduct extends StatelessWidget {
                             if (description!.isEmpty) {
                               return 'Enter Product Description';
                             }
+                            return null;
                           },
                         ),
                         const SizedBox(height:6.0),
@@ -138,6 +139,7 @@ class AddProduct extends StatelessWidget {
                                   if (price!.isEmpty) {
                                     return 'Enter Product Price';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -167,6 +169,7 @@ class AddProduct extends StatelessWidget {
                                   if (quantity!.isEmpty) {
                                     return 'Enter Product Qty';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -191,6 +194,7 @@ class AddProduct extends StatelessWidget {
                                   if (imageURL!.isEmpty) {
                                     return 'Enter Product ImageURL';
                                   }
+                                  return null;
                                 },
                               ),
                             ),
@@ -209,7 +213,7 @@ class AddProduct extends StatelessWidget {
                           onPressed: () {
                             if (addProductForm.currentState!.validate()) {
                               context.read<ImageCubit>().addProduct();
-      
+
                               WidgetsBinding.instance
                                   .addPostFrameCallback((_) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -230,7 +234,7 @@ class AddProduct extends StatelessWidget {
                                 );
                               });
                             } else {
-                              WidgetsBinding.instance!
+                              WidgetsBinding.instance
                                   .addPostFrameCallback((_) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

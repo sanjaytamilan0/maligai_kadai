@@ -21,8 +21,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-   final width = MediaQuery.of(context).size.width;
-   print(width);
+    final width = MediaQuery.of(context).size.width;
+    print(width);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(100.0),
@@ -38,49 +38,53 @@ class _LoginState extends State<Login> {
       ),
       body: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
-          final loginAccess =  context.read<LoginCubit>();
+          final loginAccess = context.read<LoginCubit>();
           if (state is LoginLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is LoginSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Center(
-                  child: Text(
-                    'Welcome User',
-                    style: TextStyle(color: Colors.black),
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Center(
+                    child: Text(
+                      'Welcome User',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
+                  backgroundColor: Colors.white,
+                  elevation: 13,
+                  margin: EdgeInsets.all(30),
+                  duration: Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
                 ),
-                backgroundColor: Colors.white,
-                elevation: 13,
-                margin: EdgeInsets.all(30),
-                duration: Duration(seconds: 1),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            context.goNamed(loginAccess.auth.currentUser!.email  == 'sanjay@gmail.com'? RoutesName.adminDashBoard:RoutesName.homeScreen);
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => HomeScreen()),
-            // );
-          });} else if (state is LoginFailure) {
+              );
+              context.goNamed(
+                  loginAccess.auth.currentUser!.email == 'sanjay@gmail.com'
+                      ? RoutesName.adminDashBoard
+                      : RoutesName.homeScreen);
+              // Navigator.pushReplacement(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => HomeScreen()),
+              // );
+            });
+          } else if (state is LoginFailure) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Center(
-                  child: Text(
-                    state.errorMessage,
-                    style: const TextStyle(color: Colors.black),
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Center(
+                    child: Text(
+                      state.errorMessage,
+                      style: const TextStyle(color: Colors.black),
+                    ),
                   ),
+                  backgroundColor: Colors.white,
+                  elevation: 13,
+                  margin: EdgeInsets.all(30),
+                  duration: Duration(seconds: 3),
+                  behavior: SnackBarBehavior.floating,
                 ),
-                backgroundColor: Colors.white,
-                elevation: 13,
-                margin: EdgeInsets.all(30),
-                duration: Duration(seconds: 3),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          });
+              );
+            });
           }
           return Form(
             key: loginForm,
@@ -139,7 +143,6 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ),
-
                               SizedBox(height: 5),
                               TextFormField(
                                 inputFormatters: [
@@ -172,8 +175,6 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               SizedBox(height: 5),
-
-
                               SizedBox(height: 5),
                               TextFormField(
                                 inputFormatters: [
@@ -228,24 +229,19 @@ class _LoginState extends State<Login> {
                                 },
                               ),
                               Padding(
-                                padding: width >450?  EdgeInsets.only(
-                                    left:250
-                                ) :EdgeInsets.only(
-                                  left:125
-                                ),
+                                padding: width > 450
+                                    ? EdgeInsets.only(left: 250)
+                                    : EdgeInsets.only(left: 125),
                                 child: GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     context.goNamed(RoutesName.forget);
                                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>const ForgetPassword()));
-
                                   },
                                   child: const Text(
                                     'Forget Password',
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold
-
-                                    ),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               )
@@ -261,15 +257,14 @@ class _LoginState extends State<Login> {
                               child: Container(
                                 width: 80,
                                 height: 30,
-                                color: Colors.red,
+                                color: Colors.green,
                                 child: GestureDetector(
                                   onTap: () async {
                                     if (loginForm.currentState!.validate()) {
-                                      context
-                                          .read<LoginCubit>()
-                                          .oldLogIn(email.text, password.text,
-                                        // phoneNumber: '+91${phoneNo.text}'
-                                      );
+                                      context.read<LoginCubit>().oldLogIn(
+                                            email.text, password.text,
+                                            // phoneNumber: '+91${phoneNo.text}'
+                                          );
                                     }
                                   },
                                   child: const Center(
@@ -277,7 +272,6 @@ class _LoginState extends State<Login> {
                                       'LOGIN',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        backgroundColor: Colors.red,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -289,26 +283,21 @@ class _LoginState extends State<Login> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text('Create a new Account?'),
-                                Container(
-                                  height: 30,
-                                  width: 45,
-                                  color: Colors.red,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                     context.goNamed(RoutesName.initial);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => Register(),
-                                      //   ),
-                                      // );
-                                    },
-                                    child: const Center(
-                                      child: Text(
-                                        'Create',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.goNamed(RoutesName.initial);
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => Register(),
+                                    //   ),
+                                    // );
+                                  },
+                                  child: const Center(
+                                    child: Text(
+                                      'Create',
+                                      style: TextStyle(
+                                        color: Colors.blue,
                                       ),
                                     ),
                                   ),

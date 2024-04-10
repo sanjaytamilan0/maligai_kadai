@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_store/User/log_out_cubit.dart';
 import 'package:flutter_store/routes/routes_name.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../Widgets/Register.dart';
 import '../../../../colors/colors.dart';
@@ -71,9 +70,11 @@ Widget drawerPanel(BuildContext context ) {
           Text('Other'),
           ListTile(
             hoverColor: MyColors.dashBoardButton,
-            onTap: () {},
+            onTap: () {
+              context.goNamed(RoutesName.profile);
+            },
             leading: Icon(Icons.settings),
-            title: Text('Setting'),
+            title: Text('profile'),
           ),
           BlocConsumer<LogOutCubit, LogOutState>(
             listener: (context, state) {
