@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_store/Widgets/Login.dart';
@@ -12,7 +11,9 @@ import 'package:flutter_store/routes/routes_name.dart';
 import 'package:flutter_store/ui/HomeScreen.dart';
 import 'package:flutter_store/ui/userscreen/cart.dart';
 import 'package:flutter_store/ui/userscreen/setting.dart';
+import 'package:flutter_store/ui/userscreen/user_home/user_home.dart';
 import 'package:go_router/go_router.dart';
+import 'package:liquid_swipe/liquid_swipe.dart';
 
 class RouteConfig {
   static GoRouter returnRouterName() {
@@ -23,13 +24,11 @@ class RouteConfig {
         name: RoutesName.initial,
         pageBuilder: (context, state) {
           return MaterialPage(
-              child:
-                auth.currentUser != null
-                      ?
-                    auth.currentUser?.email == 'sanjay@gmail.com'?AdminDashBoard():
-
-                HomeScreen()
-                      : Register());
+              child: auth.currentUser != null
+                  ? auth.currentUser?.email == 'sanjay@gmail.com'
+                      ? AdminDashBoard()
+                      : HomeScreen()
+                  : Register());
         },
       ),
       GoRoute(
@@ -39,6 +38,13 @@ class RouteConfig {
             return const MaterialPage(child: Login());
           },
           routes: [
+            GoRoute(path:'userHome',
+              name: RoutesName.userHome,
+              pageBuilder: (context, state) {
+                return MaterialPage(child: UserHome());
+              },
+
+            ),
             GoRoute(
                 path: 'adminDashBoard',
                 name: RoutesName.adminDashBoard,
@@ -59,7 +65,6 @@ class RouteConfig {
                         return MaterialPage(child: Profile());
                       }),
                 ]),
-
             GoRoute(
                 path: 'otpScreen',
                 name: RoutesName.otpScreen,
@@ -110,7 +115,6 @@ class RouteConfig {
                       pageBuilder: (context, state) {
                         return MaterialPage(child: Setting());
                       }),
-
                 ])
           ]),
     ]);

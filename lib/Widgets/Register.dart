@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_store/User/register_cubit.dart';
@@ -27,6 +28,7 @@ class _RegisterState extends State<Register> {
       body: BlocConsumer<RegistrationCubit, RegistrationState>(
         listener: (context, state) {
           if(state is RegistrationSuccess){
+
             context.goNamed(RoutesName.login);
             // Navigator.push(
             //           context,
@@ -268,6 +270,13 @@ class _RegisterState extends State<Register> {
                                           );
                                           FirebaseFirestore.instance.collection('users').add(
                                               {
+                                                'email' : email.text,
+                                                'phoneNo' : phoneNo.text,
+                                                'password' : password.text
+                                              });
+                                          FirebaseFirestore.instance.collection('user').doc(FirebaseAuth.instance.currentUser?.uid).set(
+                                              {
+                                                'uid' : FirebaseAuth.instance.currentUser?.uid,
                                                 'email' : email.text,
                                                 'phoneNo' : phoneNo.text,
                                                 'password' : password.text

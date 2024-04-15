@@ -51,6 +51,8 @@ dependencies:
   lottie:
   easy_search_bar:
   flutter_datetime_picker_bdaya:
+  firebase_messaging:
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -58,6 +60,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   pie_chart: ^5.4.0
   syncfusion_flutter_charts:
+  hover:
 
 dev_dependencies:
   flutter_test:

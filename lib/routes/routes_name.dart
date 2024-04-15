@@ -11,7 +11,7 @@ class RoutesName{
   static const String addProduct = '/addProduct';
   static const String profile = '/profile';
 
-
+  static const String userHome = '/userHome';
 
   static const String home = '/home';
   static const String cart = '/cart';
